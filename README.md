@@ -36,3 +36,26 @@ Using Heapster to monitor an OpenShift cluster requires some additional changes 
 ## Community
 
 Contributions, questions, and comments are all welcomed and encouraged! minkube developers hang out on [Slack](https://kubernetes.slack.com) in the #sig-instrumentation channel (get an invitation [here](http://slack.kubernetes.io/)). We also have the [kubernetes-dev Google Groups mailing list](https://groups.google.com/forum/#!forum/kubernetes-dev). If you are posting to the list please prefix your subject with "heapster: ".
+
+## Building Heapster and Eventer binaries and containers
+At the moment, you can build the container on mac, but you will get a 
+runtime error if you run that container on linux.
+
+### Instructions for building binaries and containers on linux
+Heapster can be slow at landing 3rd party PR's
+We currently have an open PR https://github.com/kubernetes/heapster/pull/1713
+Until it lands, we need to build our own container, and encourage customers to deploy with our heapster container at https://hub.docker.com/r/wavefronthq/heapster
+install go according to https://golang.org/doc/install
+
+    ~> export GOPATH=~/go && cd $GOPATH
+    go> mkdir -p src/k8s.io && cd !$
+    k8s.io> git clone github.com/sunnylabs/heapster.git && cd heapster
+    heapster> make test-unit
+    heapster> make
+    heapster> mv eventer heapster deploy/docker && cd !$
+    docker> cp /etc/ssl/certs/ca-certificates.crt .
+    docker> version=v1.4.0.1  sudo docker build -t ${version}-g$(git rev-parse --short HEAD) .
+    docker> docker login
+    docker> docker push wavefronthq/heapster:${version}-g$(git rev-parse --short HEAD)
+    Then update heapster.yml in sunnylabs/k8s/clusters tree
+
