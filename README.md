@@ -4,6 +4,18 @@
 
 Heapster enables Container Cluster Monitoring and Performance Analysis.
 
+## Wavefront by VMWare's Heapster
+This repo is to support building containers for internal wavefront and client testing hosted at docker.io/wavefronthq.
+This allows us to support patches and features without having to rely on PRs being accepted by the upstream Kubernetes project at github.com/kubernetes/heapster.git
+
+## Current Wavefront by VMWare Heapster Status
+We recommend that if you wish to use kubernetes labels that you use docker.io/wavefronthq/heapster:latest
+If you do not need labels, you may use the upstream grc.io heapster container.
+When the PR https://github.com/kubernetes/heapster/pull/1713 has been merged and new upstream containers with the fix are publically available from the upstream project, we will recommend going back to upstream latest for heapster.
+
+When creating a new PR to upstream, work on a feature branch and be sure to 
+`git checkout upstream/master README.md` along with the feature change.
+
 Heapster currently supports [Kubernetes](https://github.com/kubernetes/kubernetes) and CoreOS natively.
 *Heapster is compatible with kubernetes versions starting from v1.0.6 only*
 
